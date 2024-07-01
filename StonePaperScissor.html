@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock paper scissor game</title>
+    <style>
+        body{
+            background-color: aliceblue;
+        }
+        .images {
+            display: flex;
+            justify-content: space-around;
+            height: 200px;
+            
+        }
+        .computerMove{
+            animation: shake1 0.8s linear;
+        }
+        .playerMove{
+            animation: shake2 0.8s linear;
+        }
+        
+        .points{
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 30px;
+        }
+        .option{
+            display: flex;
+            justify-content: space-around;
+            margin-top: 100px;
+         
+        }
+        .option button{
+            text-transform: uppercase;
+            padding: 10px 60px;
+            background-color: rgb(80, 244, 244);
+            color: rgb(0, 0, 0);
+            font-weight: 700;
+            border: 2px solid black;
+            border-radius: 30px;
+        }
+        .option button:hover{
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s linear;
+            border-radius: 0;
+        }
+        .option button:active{
+            transform: scale(0.9);
+        }
+        .computerPoints{
+            margin-left: 30px;
+        }
+        .playerPoints{
+            margin-right: 30px;
+        }
+        .play{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 50px;
+
+        }
+        .play button{
+            max-width: 100px;
+            height: 40px;
+            background-color: red;
+            color: white;
+            border: 2px solid rgb(0, 0, 0);
+            border-radius: 30px;
+
+        }
+        .play input{
+            max-width: 200px;
+            height: 50px;
+            font-size: 25px;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+        }
+        .play button:hover{
+            cursor: pointer;
+        }
+        .play button:active{
+            transform: scale(0.9);
+            transition: 0.3s linear;
+        }
+
+        @keyframes shake1{
+            0%{
+                transform: rotate(30deg);
+            }
+            25%{
+                transform: rotate(-30deg);
+            }
+            50%{
+                transform: rotate(30deg);
+            }
+            75%{
+                transform: rotate(-30deg);
+            }
+            100%{
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes shake2{
+            0%{
+                transform: rotate(-30deg);
+            }
+            25%{
+                transform: rotate(30deg);
+            }
+            50%{
+                transform: rotate(-30deg);
+            }
+            75%{
+                transform: rotate(30deg);
+            }
+            100%{
+                transform: rotate(0deg);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <div class="images">
+       
+        <img class="computer" src="./stoneComputer.png">
+        <img class="player" src="./stonePlayer.png">
+
+    </div>
+    <div class="points">
+        COMPUTER<span class="computerPoints">0</span>/<span class="playerPoints">0</span>PLAYER(YOU)
+    </div>
+    <div class="option">
+        <button type="button">stone</button>
+        <button type="button">paper</button>
+        <button type="button">scissors</button>
+
+    </div>
+
+    <div class="play">
+        <input type="text" name="result" disabled>
+        <button type="button">Play Again</button>
+    </div>
+
+</div>
+</body>
+<script>
+    const computer = document.querySelector('.images .computer');
+    const player = document.querySelector('.images .player');
+    const computerPoints = document.querySelector('.computerPoints');
+    const playerPoints = document.querySelector('.playerPoints');
+
+    const buttons = document.querySelectorAll('.option button');
+    
+    buttons.forEach(button=>{
+        button.addEventListener('click', ()=>{
+            computer.classList.add('computerMove');
+            player.classList.add('playerMove');
+            setTimeout(() => {
+                computer.classList.remove('computerMove');
+                player.classList.remove('playerMove');
+
+                
+                player.src="./"+button.innerHTML+"Player.png";
+
+                const arr = ["stone", "paper", "scissors"];
+                let rNumber = Math.floor(Math.random()*3);
+                let computerChoice = arr[rNumber];
+
+                computer.src="./"+computerChoice+"Computer.png";
+
+                let cPoint = parseInt(computerPoints.innerHTML);
+                let pPoint = parseInt(playerPoints.innerHTML);
+
+                if (button.innerHTML==="stone") {
+                    if(computerChoice==="paper"){
+                        computerPoints.innerHTML=cPoint+1;
+
+                    }
+                    else if(computerChoice==="scissors"){
+                        playerPoints.innerHTML=pPoint+1;
+                    }
+                }
+                else if(button.innerHTML==="paper"){
+                    if(computerChoice=="stone"){
+                        playerPoints.innerHTML= pPoint+1;
+                    }
+                    else if(computerChoice==="scissors"){
+                        computerPoints.innerHTML= cPoint+1;
+                    }
+                   
+                }
+                else{
+                    if(computerChoice==="stone"){
+                        computerPoints.innerHTML= cPoint+1;
+                    }
+                    else if(computerChoice==="paper"){
+                        playerPoints.innerHTML=pPoint+1;
+                    }
+                    
+                }
+
+                const result = document.querySelector('.play input');
+                const play = document.querySelector('.play button');
+
+                if (computerPoints.innerHTML==10) {
+                    result.value="Computer Won";
+                    buttons.forEach(button=>{
+                        button.style.background="aliceblue";
+                        button.style.color="aliceblue";
+                        button.style.border="none";
+                        
+                    });   
+                }
+                else if (playerPoints.innerHTML==10) {
+                    result.value="You Won";
+                    buttons.forEach(button=>{
+                        button.style.background="aliceblue";
+                        button.style.color="aliceblue";
+                        button.style.border="none";
+                        
+                    }); 
+                }
+
+                play.addEventListener('click',()=>{
+                    location.reload(); 
+
+                });
+
+            }, 900);
+        });
+    });
+
+</script>
+
+</html>
